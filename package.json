@@ -1,0 +1,25 @@
+{
+  "name": "mwi",
+  "version": "0.0.1",
+  "description": "mwi - modern web initializer",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heejongahn/mwi.git"
+  },
+  "keywords": [
+    "modern",
+    "web",
+    "initialization",
+    "boilerplate",
+    "bootstrap"
+  ],
+  "author": "Heejong Ahn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/heejongahn/mwi/issues"
+  },
+  "homepage": "https://github.com/heejongahn/mwi#readme"
+}
