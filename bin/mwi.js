@@ -1,3 +1,3 @@
-#!usr/bin/env node
+#!/usr/bin/env node
 
-console.log('Heejong is an awesome guy')
+console.log(`You are now working at ${process.cwd()} directory`)
