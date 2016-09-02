@@ -2,9 +2,9 @@
   "name": "mwi",
   "version": "0.0.1",
   "description": "mwi - modern web initializer",
-  "main": "lib/index.js",
-  "bin": "bin/mwi.js",
+  "main": "dist/index.js",
   "jsnext:main": "dist/index.es.js",
+  "bin": "bin/mwi.js",
   "scripts": {
     "build": "node_modules/.bin/rollup -c"
   },
