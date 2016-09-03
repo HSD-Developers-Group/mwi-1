@@ -1,20 +1,25 @@
 import inquirer from 'inquirer'
+import * as path from 'path'
+import * as fs from 'fs'
 
 const questions = [
   {
-    type: 'confirm',
-    name: 'trivial',
-    message: 'Do you think Heejong is awesome?',
-    default: true
+    name: 'name',
+    message: 'What\'s the name of your project?',
+    default: 'coolApp'
   }
 ]
 
-inquirer
+export default () => {
+  inquirer
   .prompt(questions)
   .then(answer => {
-    if (answer.trivial) {
-      console.log('That\'s right! Great job done there!')
-    } else {
-      console.log('You\'re stupid.')
-    }
+    fs.mkdir(path.join(process.cwd(), answer.name), (err) => {
+      if (err) {
+        console.log('Oops, something went wrong')
+      } else {
+        console.log('There you go :-)')
+      }
+    })
   })
+}
