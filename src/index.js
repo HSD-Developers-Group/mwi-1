@@ -5,7 +5,7 @@ import * as fs from 'mz/fs';
 const questions = [
   {
     name: 'name',
-    message: 'What\'s the name of your project?',
+    message: 'First off, what\'s the name of your project?',
     default: 'coolApp',
   },
   {
@@ -27,7 +27,7 @@ const questions = [
   {
     type: 'checkbox',
     name: 'additional',
-    message: 'I suppose some of these might come handy with your choice..',
+    message: 'I suppose some of these might come handy..',
     choices: answer => {
       const base = ['jquery', 'whatwg-fetch', 'eslint'];
       switch (answer.spa) {
@@ -44,7 +44,7 @@ const questions = [
   {
     type: 'list',
     name: 'frontend',
-    message: 'Cool. For the frontend framework?',
+    message: 'Fantastic! For the frontend framework?',
     choices: [
       'bootstrap',
       'semantic-ui',
@@ -54,7 +54,7 @@ const questions = [
   {
     type: 'list',
     name: 'buildTool',
-    message: 'Last but not least, your build/bundling tool?',
+    message: 'Last but not least, what\'s your build/bundling tool?',
     choices: [
       'webpack',
       'rollup',
