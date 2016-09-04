@@ -1,17 +1,17 @@
-import inquirer from 'inquirer'
-import * as path from 'path'
-import * as fs from 'mz/fs'
+import inquirer from 'inquirer';
+import * as path from 'path';
+import * as fs from 'mz/fs';
 
 const questions = [
   {
     name: 'name',
     message: 'What\'s the name of your project?',
-    default: 'coolApp'
+    default: 'coolApp',
   },
   {
     name: 'description',
     message: 'A brief description, please.',
-    default: 'An application cooler than DJ Kool Herc'
+    default: 'An application cooler than DJ Kool Herc',
   },
   {
     type: 'list',
@@ -21,25 +21,25 @@ const questions = [
       'react',
       'angular',
       'angular2',
-      'Nothing'
-    ]
+      'Nothing',
+    ],
   },
   {
     type: 'checkbox',
     name: 'additional',
     message: 'I suppose some of these might come handy with your choice..',
     choices: answer => {
-      const base = ['jquery', 'whatwg-fetch', 'eslint']
+      const base = ['jquery', 'whatwg-fetch', 'eslint'];
       switch (answer.spa) {
         case 'react':
-          return base.concat(['redux', 'react-router'])
+          return base.concat(['redux', 'react-router']);
         case 'angular':
         case 'angular2':
-          return base.concat(['angular-material'])
+          return base.concat(['angular-material']);
         default:
-          return base
+          return base;
       }
-    }
+    },
   },
   {
     type: 'list',
@@ -48,8 +48,8 @@ const questions = [
     choices: [
       'bootstrap',
       'semantic-ui',
-      'Nothing'
-    ]
+      'Nothing',
+    ],
   },
   {
     type: 'list',
@@ -59,30 +59,32 @@ const questions = [
       'webpack',
       'rollup',
       'gulp',
-      'Nothing'
-    ]
-  }
-]
+      'Nothing',
+    ],
+  },
+];
 
 const parseAnswer = (answer) => {
-  const { name, spa, additional, frontend, buildTool } = answer
+  const { name, spa, additional, frontend, buildTool } = answer;
   const packages = [spa, frontend, buildTool]
     .filter(item => item !== 'Nothing')
-    .concat(additional)
+    .concat(additional);
 
-  return { name, packages }
-}
+  return { name, packages };
+};
 
 export default () => {
-  const cwd = process.cwd()
+  const cwd = process.cwd();
 
   inquirer
   .prompt(questions)
   .then(answer => {
-    const packageInfo = parseAnswer(answer)
+    const packageInfo = parseAnswer(answer);
 
-    fs.mkdirSync(path.join(cwd, packageInfo.name))
-    console.log(packageInfo.packages)
+    fs.mkdirSync(path.join(cwd, packageInfo.name));
+    console.log(packageInfo.packages);
   })
-  .catch(err => console.log(err.message))
-}
+  .catch(err => {
+    console.log(err.message);
+  });
+};
