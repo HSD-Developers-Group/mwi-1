@@ -73,18 +73,27 @@ const parseAnswer = (answer) => {
   return { name, packages };
 };
 
+const createGitignore = (location) =>
+  fs.writeFile(path.join(location, '.gitignore'), 'node_modules/\ndist/');
+
 export default () => {
-  const cwd = process.cwd();
+  let packageInfo;
+  let projectPath;
 
   inquirer
-  .prompt(questions)
-  .then(answer => {
-    const packageInfo = parseAnswer(answer);
-
-    fs.mkdirSync(path.join(cwd, packageInfo.name));
-    console.log(packageInfo.packages);
-  })
-  .catch(err => {
-    console.log(err.message);
-  });
+    .prompt(questions)
+    .then(answer => {
+      packageInfo = parseAnswer(answer);
+      projectPath = path.join(process.cwd(), packageInfo.name);
+    })
+    .then(() => fs.mkdir(projectPath))
+    .then(err => {
+      if (err) { throw new Error(err); }
+      return createGitignore(projectPath);
+    })
+    .then(err => {
+      if (err) { throw new Error(err); }
+      console.log('Created folder and gitignore');
+    })
+    .catch(e => console.log(e.msg));
 };
