@@ -8,7 +8,8 @@
   "scripts": {
     "prebuild": "npm run lint",
     "build": "node_modules/.bin/rollup -c",
-    "lint": "node_modules/.bin/eslint src/index.js"
+    "lint": "node_modules/.bin/eslint src/index.js",
+    "watch": "npm run build -- --watch"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.1",
     "eslint-plugin-react": "^6.2.0",
     "rollup": "^0.34.13",
-    "rollup-plugin-babel": "^2.6.1"
+    "rollup-plugin-babel": "^2.6.1",
+    "rollup-watch": "^2.5.0"
   }
 }
