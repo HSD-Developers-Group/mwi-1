@@ -100,6 +100,11 @@ export default () => {
       packageInfo = parseAnswer(answer);
       projectPath = path.join(process.cwd(), packageInfo.name);
     })
+    .then(() => {
+      console.log('Your answer:');
+      Object.keys(packageInfo)
+        .map(index => console.log(`${index}: ${packageInfo[index]}`));
+    })
     .then(() => fs.mkdir(projectPath))
     .then(err => {
       if (err) { throw new Error(err); }
