@@ -54,21 +54,35 @@ const questions = [
   {
     type: 'list',
     name: 'buildTool',
-    message: 'Last but not least, what\'s your build/bundling tool?',
+    message: 'And what\'s your build/bundling tool?',
     choices: [
       'webpack',
       'rollup',
-      'gulp',
       'Nothing',
     ],
+  },
+  {
+    type: 'confirm',
+    name: 'es6',
+    message: 'Last but not least, you\'re gonna write ES6, aren\'t you?',
+    default: true,
   },
 ];
 
 const parseAnswer = (answer) => {
-  const { name, spa, additional, frontend, buildTool } = answer;
+  const { name, spa, additional, frontend, buildTool, es6 } = answer;
   const packages = [spa, frontend, buildTool]
     .filter(item => item !== 'Nothing')
     .concat(additional);
+
+  if (es6) {
+    if (buildTool === 'webpack') {
+      packages.push(...['babel-loader', 'babel-preset-es2015']);
+    } else if (buildTool === 'rollup') {
+      packages.push(...['babelrc-rollup', 'babel-preset-es2015-rollup',
+        'rollup-plugin-babel']);
+    }
+  }
 
   return { name, packages };
 };
