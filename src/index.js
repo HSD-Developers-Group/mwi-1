@@ -1,6 +1,7 @@
 import inquirer from 'inquirer';
 import * as path from 'path';
 import * as fs from 'mz/fs';
+import * as childProcess from 'child-process-promise';
 
 const questions = [
   {
@@ -87,8 +88,35 @@ const parseAnswer = (answer) => {
   return { name, packages };
 };
 
-const createGitignore = (location) =>
-  fs.writeFile(path.join(location, '.gitignore'), 'node_modules/\ndist/');
+const createGitignore = (location) => {
+  return fs.writeFile(path.join(location, '.gitignore'), 'node_modules/\ndist/');
+}
+
+const npmInit = (location, packageInfo) => {
+  const scripts = { lint: 'node_modules/.bin/eslint src/index.js' };
+  if (packageInfo.packages.includes('webpack')) {
+    scripts.build = 'node_modules/.bin/webpack';
+  } else {
+    scripts.build = 'node_mobules/.bin/rollup';
+  }
+
+  return fs.writeFile(
+    path.join(location, 'package.json'),
+    JSON.stringify({
+      name: packageInfo.name,
+      version: '0.0.1',
+      main: 'dist/index.js',
+      scripts,
+    }))
+    .then(err => {
+      if (err) { throw new Error(err); }
+      return childProcess.spawn(
+        'npm',
+        ['install', '--save', ...packageInfo.packages],
+        { cwd: location, capture: ['stdout', 'stderr'] }
+      );
+    });
+};
 
 export default () => {
   let packageInfo;
@@ -114,5 +142,9 @@ export default () => {
       if (err) { throw new Error(err); }
       console.log('Created folder and gitignore');
     })
-    .catch(e => console.log(e.msg));
+    .then(() => npmInit(projectPath, packageInfo))
+    .then(result => {
+      console.log(result.stdout.toString());
+    })
+    .catch(e => console.log(e.message));
 };
