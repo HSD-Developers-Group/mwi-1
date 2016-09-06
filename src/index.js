@@ -33,12 +33,12 @@ const questions = [
       const base = ['jquery', 'whatwg-fetch', 'eslint'];
       switch (answer.spa) {
         case 'react':
-          return base.concat(['redux', 'react-router']);
+          return base.concat(['redux', 'react-router']).sort();
         case 'angular':
         case 'angular2':
-          return base.concat(['angular-material']);
+          return base.concat(['angular-material']).sort();
         default:
-          return base;
+          return base.sort();
       }
     },
   },
@@ -77,20 +77,30 @@ const parseAnswer = (answer) => {
     .concat(additional);
 
   if (es6) {
+    packages.push('babel-polyfill')
+    if (spa === 'react') packages.push('babel-preset-react')
+
     if (buildTool === 'webpack') {
-      packages.push(...['babel-loader', 'babel-preset-es2015']);
+      packages.push(...[
+        'babel-loader',
+        'babel-preset-es2015',
+      ]);
     } else if (buildTool === 'rollup') {
-      packages.push(...['babelrc-rollup', 'babel-preset-es2015-rollup',
-        'rollup-plugin-babel']);
+      packages.push(...[
+        'rollup-plugin-babel'
+        'babel-preset-es2015-rollup',
+      ]);
     }
   }
+
+  packages.sort();
 
   return { name, packages };
 };
 
-const createGitignore = (location) => {
-  return fs.writeFile(path.join(location, '.gitignore'), 'node_modules/\ndist/');
-}
+const createGitignore = (location) =>
+  fs.writeFile(path.join(location, '.gitignore'), 'node_modules/\ndist/');
+
 
 const npmInit = (location, packageInfo) => {
   const scripts = { lint: 'node_modules/.bin/eslint src/index.js' };
@@ -140,11 +150,12 @@ export default () => {
     })
     .then(err => {
       if (err) { throw new Error(err); }
-      console.log('Created folder and gitignore');
+      console.log('✔︎ Created folder and gitignore');
     })
     .then(() => npmInit(projectPath, packageInfo))
     .then(result => {
-      console.log(result.stdout.toString());
+      if (result.stderr) { throw new Error(result.stderr); }
+      console.log('✔︎ Initialized npm and installed dependencied');
     })
     .catch(e => console.log(e.message));
 };
