@@ -71,14 +71,14 @@ const questions = [
 ];
 
 const parseAnswer = (answer) => {
-  const { name, spa, additional, frontend, buildTool, es6 } = answer;
+  const { name, description, spa, additional, frontend, buildTool, es6 } = answer;
   const packages = [spa, frontend, buildTool]
     .filter(item => item !== 'Nothing')
     .concat(additional);
 
   if (es6) {
-    packages.push('babel-polyfill')
-    if (spa === 'react') packages.push('babel-preset-react')
+    packages.push('babel-polyfill');
+    if (spa === 'react') packages.push('babel-preset-react');
 
     if (buildTool === 'webpack') {
       packages.push(...[
@@ -87,7 +87,7 @@ const parseAnswer = (answer) => {
       ]);
     } else if (buildTool === 'rollup') {
       packages.push(...[
-        'rollup-plugin-babel'
+        'rollup-plugin-babel',
         'babel-preset-es2015-rollup',
       ]);
     }
@@ -95,7 +95,7 @@ const parseAnswer = (answer) => {
 
   packages.sort();
 
-  return { name, packages };
+  return { name, description, packages };
 };
 
 const createGitignore = (location) =>
@@ -128,6 +128,18 @@ const npmInit = (location, packageInfo) => {
     });
 };
 
+const createHtml = (location, packageInfo) =>
+  fs.readFile(path.join(__dirname, '..', 'index.html'), { encoding: 'utf8' })
+    .then((data, err) => {
+      if (err) { throw new Error(err); }
+      const content = data
+        .replace(/<name>/, packageInfo.name)
+        .replace(/<description>/, packageInfo.description);
+
+      return fs.writeFile(path.join(location, 'index.html'), content);
+    }
+  );
+
 export default () => {
   let packageInfo;
   let projectPath;
@@ -154,8 +166,13 @@ export default () => {
     })
     .then(() => npmInit(projectPath, packageInfo))
     .then(result => {
-      if (result.stderr) { throw new Error(result.stderr); }
+      if (result.err) { throw new Error(result.err); }
       console.log('✔︎ Initialized npm and installed dependencied');
+    })
+    .then(() => createHtml(projectPath, packageInfo))
+    .then(err => {
+      if (err) { throw new Error(err); }
+      console.log('✔︎ Created base HTML');
     })
     .catch(e => console.log(e.message));
 };
