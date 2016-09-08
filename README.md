@@ -4,11 +4,15 @@ mwi does trivial and boring initial configuration procedure for you, which all
 modern web apps require. Why copy & paste & edit a dozen files when few answers
 can do the same job?
 
-## features
+## Supported Features
 
-- git & npm initialization
-- cherry picking setup among popular libraries (react, angular, ...)
-- plus frontend framework (bootstrap, semantic-ui, ...)
-- rollup / webpack + babel configuration
+- Git & npm initialization
+- Automatic dependencies installation
+- Base HTML creation
 
-Note that mwi has nothing to do with the backend of the app.
+## Milestones before first publish
+
+- Library-dependent index.js
+- Rollup / Webpack + Babel configuration
+- Customized base HTML for selected frontend framework
+- Out-of-the-box dev server
