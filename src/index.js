@@ -44,11 +44,11 @@ const questions = [
   },
   {
     type: 'list',
-    name: 'frontend',
-    message: 'Fantastic! For the frontend framework?',
+    name: 'css',
+    message: 'Fantastic! For the CSS framework?',
     choices: [
       'bootstrap',
-      'semantic-ui',
+      'semantic-ui-css',
       'Nothing',
     ],
   },
@@ -71,8 +71,8 @@ const questions = [
 ];
 
 const parseAnswer = (answer) => {
-  const { name, description, spa, additional, frontend, buildTool, es6 } = answer;
-  const packages = [spa, frontend, buildTool]
+  const { name, description, spa, additional, css, buildTool, es6 } = answer;
+  const packages = [spa, css, buildTool]
     .filter(item => item !== 'Nothing')
     .concat(additional);
 
