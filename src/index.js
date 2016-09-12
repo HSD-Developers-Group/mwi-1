@@ -129,7 +129,7 @@ const npmInit = (location, packageInfo) => {
 };
 
 const createHtml = (location, packageInfo) =>
-  fs.readFile(path.join(__dirname, '..', 'index.html'), { encoding: 'utf8' })
+  fs.readFile(path.join(__dirname, '../tmpl/index.html'), { encoding: 'utf8' })
     .then((data, err) => {
       if (err) { throw new Error(err); }
       const content = data
