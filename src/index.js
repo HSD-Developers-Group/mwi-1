@@ -59,7 +59,6 @@ const questions = [
     choices: [
       'webpack',
       'rollup',
-      'Nothing',
     ],
   },
   {
@@ -115,7 +114,6 @@ const npmInit = (location, packageInfo) => {
     JSON.stringify({
       name: packageInfo.name,
       version: '0.0.1',
-      main: 'dist/index.js',
       scripts,
     }))
     .then(err => {
