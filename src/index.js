@@ -126,25 +126,30 @@ const npmInit = (location, packageInfo) => {
     });
 };
 
-const copyFile = (filename, destination, packageInfo) =>
-  fs.readFile(
-    path.join(__dirname, `../tmpl/${packageInfo.spa}/${filename}`),
-    { encoding: 'utf8' }
-  ).then((data, err) => {
-    if (err) { throw new Error(err); }
+const copyFile = (filename, srcDir, dstDir, middleware) =>
+  fs.readFile(path.join(srcDir, filename), { encoding: 'utf8' })
+    .then((data, err) => {
+      if (err) { throw new Error(err); }
 
-    let content = data;
-    if (filename === 'index.html') {
-      content = content
-        .replace(/<name>/, packageInfo.name)
-        .replace(/<description>/, packageInfo.description);
-    }
+      let content = data;
+      if (middleware) content = middleware(content);
 
-    return fs.writeFile(path.join(destination, filename), content);
-  });
+      return fs.writeFile(path.join(dstDir, filename), content);
+    });
 
-const createHtml = (location, packageInfo) =>
-  copyFile('index.html', location, packageInfo);
+const createHtml = (dstDir, packageInfo) => {
+  const htmlMiddleware = (content) =>
+    content
+      .replace(/<name>/, packageInfo.name)
+      .replace(/<description>/, packageInfo.description);
+
+  return copyFile(
+    'index.html',
+    path.join(__dirname, `../tmpl/${packageInfo.spa}`),
+    dstDir,
+    htmlMiddleware
+  );
+};
 
 export default () => {
   let packageInfo;
