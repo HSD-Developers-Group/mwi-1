@@ -95,7 +95,7 @@ const parseAnswer = (answer) => {
 
   packages.sort();
 
-  return { name, description, packages };
+  return { name, spa, description, packages };
 };
 
 const createGitignore = (location) =>
@@ -128,17 +128,25 @@ const npmInit = (location, packageInfo) => {
     });
 };
 
-const createHtml = (location, packageInfo) =>
-  fs.readFile(path.join(__dirname, '../tmpl/index.html'), { encoding: 'utf8' })
-    .then((data, err) => {
-      if (err) { throw new Error(err); }
-      const content = data
+const copyFile = (filename, destination, packageInfo) =>
+  fs.readFile(
+    path.join(__dirname, `../tmpl/${packageInfo.spa}/${filename}`),
+    { encoding: 'utf8' }
+  ).then((data, err) => {
+    if (err) { throw new Error(err); }
+
+    let content = data;
+    if (filename === 'index.html') {
+      content = content
         .replace(/<name>/, packageInfo.name)
         .replace(/<description>/, packageInfo.description);
-
-      return fs.writeFile(path.join(location, 'index.html'), content);
     }
-  );
+
+    return fs.writeFile(path.join(destination, filename), content);
+  });
+
+const createHtml = (location, packageInfo) =>
+  copyFile('index.html', location, packageInfo);
 
 export default () => {
   let packageInfo;
